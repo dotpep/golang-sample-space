@@ -18,14 +18,21 @@ func init() {
 	APIKEY = os.Getenv("OPENWEATHER_APIKEY")
 }
 
+// openweather rest api (json response encoder struct type)
+type WeatherData struct {
+	Main struct {
+		Temp float64 `json:"temp"`
+	} `json:"main"`
+	Name    string `json:"name"`
+	Weather []struct {
+		Description string `json:"description"`
+	} `json:"weather"`
+}
+
 // Without Concurrent Example:
 
-func fetchWeather1(city string) interface{} {
-	var data struct {
-		Main struct {
-			Temp float64 `json:"temp"`
-		} `json:"main"`
-	}
+func fetchWeather1(city string) WeatherData {
+	var data WeatherData
 
 	url := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s", city, APIKEY)
 	resp, err := http.Get(url)
@@ -95,6 +102,14 @@ func concurrentFetchData() {
 	startNow := time.Now()
 
 	cities := []string{
+		"London", "Tokyo", "Almaty",
+		"Paris", "Toronto", "Seoul",
+		"Moscow", "Copenhagen", "Washington",
+
+		"London", "Tokyo", "Almaty",
+		"Paris", "Toronto", "Seoul",
+		"Moscow", "Copenhagen", "Washington",
+
 		"London", "Tokyo", "Almaty",
 		"Paris", "Toronto", "Seoul",
 		"Moscow", "Copenhagen", "Washington",
